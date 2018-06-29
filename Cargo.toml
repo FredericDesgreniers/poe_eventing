@@ -4,7 +4,5 @@ version = "0.1.0"
 authors = ["Frederic Desgreniers <fredericdesgreniers@gmail.com>"]
 
 [dependencies]
-winapi = {version="0.3.5", features=["fileapi", "winnt", "synchapi", "winbase", "errhandlingapi", "handleapi"]}
 failure = "0.1.1"
-win32-error = "0.9.0"
 regex = "1.0.1"

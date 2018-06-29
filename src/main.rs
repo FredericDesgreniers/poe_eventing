@@ -2,8 +2,6 @@
 #![feature(never_type)]
 extern crate failure;
 extern crate regex;
-extern crate win32_error;
-extern crate winapi;
 
 mod events;
 mod io_watch;
