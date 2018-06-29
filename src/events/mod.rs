@@ -4,7 +4,7 @@ use self::manager::EventManager;
 use failure::Error;
 use io_watch::poll::Poller;
 use regex::Captures;
-use std::sync::mpsc::{Sender};
+use std::sync::mpsc::Sender;
 use std::sync::Arc;
 
 /// Generic info about a poe log file line
@@ -34,7 +34,7 @@ impl<T: Poller<Output = String>> PoeEvents<T> {
     /// `sender` A send channel. The receiver end will get back the events
     pub fn new(string_poll: T, sender: Sender<(PoeEvent, PoeLogLineInfo)>) -> Self {
         Self {
-            event_manager :EventManager::new(string_poll),
+            event_manager: EventManager::new(string_poll),
             sender: Arc::new(sender),
         }
     }
