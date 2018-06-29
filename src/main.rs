@@ -30,8 +30,8 @@ fn main() -> Result<(), Error> {
         }
     });
 
-    event_manager.register_event("^: You have entered (?P<location>.*)\\.$", |c| {
-        let location = &c["location"];
+    event_manager.register_event("^: You have entered (?P<location>.*)\\.$", |captures| {
+        let location = &captures["location"];
         println!("Entered: {}", location);
     })?;
 
