@@ -1,15 +1,18 @@
 #![feature(nll)]
 #![feature(never_type)]
+extern crate core;
 extern crate failure;
 extern crate regex;
 
 mod events;
 mod io_watch;
 
-use events::EventManager;
+use events::PoeEvents;
 use failure::Error;
 use io_watch::poll::StringLinePoll;
 use std::fs::File;
+use std::sync::mpsc::channel;
+use std::thread;
 
 fn main() -> Result<(), Error> {
     let line_poll = StringLinePoll::new(
@@ -20,20 +23,18 @@ fn main() -> Result<(), Error> {
         1024,
     )?;
 
-    let mut event_manager = EventManager::new(line_poll);
+    let (sender, receiver) = channel();
 
-    event_manager.register_filter(|line: String| {
-        if let Some(index) = line.find("]") {
-            line[index + 1..].trim().to_string()
-        } else {
-            line
-        }
+    thread::spawn(|| {
+        let mut poe_events = PoeEvents::new(line_poll, sender);
+
+        poe_events.register_poe_events().unwrap();
+        poe_events.run().unwrap()
     });
 
-    event_manager.register_event("^: You have entered (?P<location>.*)\\.$", |captures| {
-        let location = &captures["location"];
-        println!("Entered: {}", location);
-    })?;
+    for (event, info) in receiver {
+        println!("{:?}- {:?}", info, event)
+    }
 
-    event_manager.run()?;
+    Ok(())
 }
