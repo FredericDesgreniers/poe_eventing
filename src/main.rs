@@ -2,7 +2,10 @@
 #![feature(never_type)]
 extern crate core;
 extern crate failure;
+extern crate poe_data;
 extern crate regex;
+#[macro_use]
+extern crate lazy_static;
 
 mod events;
 mod io_watch;
