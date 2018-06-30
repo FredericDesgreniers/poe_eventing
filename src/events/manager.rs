@@ -59,13 +59,21 @@ impl<T: Poller<Output = String>, F: Default + Clone> EventManager<T, F> {
                 .for_each(|data| {
                     let (string, info) = data;
 
-                    self.registered_events.iter().for_each(|event| {
+                    let mut found = false;
+
+                    for event in &self.registered_events {
                         if let Some(captures) = event.regex.captures(&string) {
                             let callback = &*event.callback;
 
                             callback(captures, info.clone());
+
+                            found = true;
                         };
-                    })
+                    }
+
+                    if !found {
+                        //println!("{:?}", string);
+                    }
                 });
         }
     }
